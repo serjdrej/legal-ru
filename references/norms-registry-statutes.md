@@ -19,8 +19,7 @@
 
 ### R-98-3 — Федеральный закон от 29.07.2004 № 98-ФЗ «О коммерческой тайне», статья 3
 
-**Статус:** парафраз; drafted from training data on 2026-09-10, not yet
-verified against a live source — re-check before reliance. В частности, не
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance. В частности, не
 сверена действующая редакция и изменения после даты подготовки.
 
 **Содержание для черновика:** закон различает «коммерческую тайну» как режим
@@ -38,8 +37,7 @@ verified against a live source — re-check before reliance. В частност
 
 ### R-98-5 — Федеральный закон от 29.07.2004 № 98-ФЗ «О коммерческой тайне», статья 5
 
-**Статус:** парафраз; drafted from training data on 2026-09-10, not yet
-verified against a live source — re-check before reliance. Номер статьи указан
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance. Номер статьи указан
 с высокой, но не подтверждённой по живому источнику уверенностью; требуется
 сверка.
 
@@ -64,11 +62,7 @@ verified against a live source — re-check before reliance. Номер стат
 
 ### R-98-10 — Федеральный закон от 29.07.2004 № 98-ФЗ «О коммерческой тайне», статья 10
 
-**Статус:** paraphrased from training data, not verified against the live
-portal — re-run `python scripts/pravo_lookup.py search "98-ФЗ"` (or check
-`publication.pravo.gov.ru` directly) before relying on this for a real matter.
-Drafted from training data on 2026-09-10; не верифицировано по живому
-источнику и не является подтверждением действующей редакции.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance. Для этой записи особенно важно выполнить `python scripts/pravo_lookup.py search "98-ФЗ"` (или проверить `publication.pravo.gov.ru` напрямую) перед реальным использованием — это конституирующая норма всего режима коммерческой тайны.
 
 **Содержание для черновика:** для установления режима обладатель должен
 принять совокупность мер: определить перечень охраняемой информации; ограничить
@@ -90,8 +84,7 @@ Drafted from training data on 2026-09-10; не верифицировано по
 
 ### R-98-TK14 — ТК РФ, глава 14: работники и конфиденциальность
 
-**Статус:** cross-reference only; drafted from training data on 2026-09-10,
-not yet verified against a live source — re-check before reliance.
+**Статус:** только перекрёстная ссылка; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для черновика:** для обязанностей перед работниками и документов
 о доступе не заменяйте трудовое регулирование одной ссылкой на NDA. Сверьте
@@ -103,8 +96,7 @@ not yet verified against a live source — re-check before reliance.
 
 ### R-GK-431 — ГК РФ, статья 431: толкование договора
 
-**Статус:** парафраз; drafted from training data on 2026-09-10, not yet
-verified against a live source — re-check before reliance.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для черновика:** при споре сначала учитывается буквальное
 значение слов и выражений договора; при неясности оно сопоставляется с другими
@@ -120,8 +112,7 @@ verified against a live source — re-check before reliance.
 
 ### R-GK-401-406 — ГК РФ, статьи 401–406: ответственность, непреодолимая сила и просрочка
 
-**Статус:** парафраз; drafted from training data on 2026-09-10, not yet
-verified against a live source — re-check before reliance.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для черновика:** этот блок регулирует общие основания
 ответственности за нарушение обязательств, в том числе правило о вине и

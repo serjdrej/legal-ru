@@ -44,8 +44,7 @@ training data on 2026-09-10, not verified against a live source. Задаёт
 
 ### R-APK-129-148 — АПК РФ, статьи 129 и 148: последствие несоблюдения порядка
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для ориентира:** если обязательный по закону или договору
 претензионный (либо иной досудебный) порядок не соблюдён до принятия иска,
@@ -77,8 +76,7 @@ training data on 2026-09-10, not verified against a live source. Это
 
 ### R-GK-199 — ГК РФ, статья 199: заявление о давности и последствие её истечения
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для ориентира:** истечение исковой давности само по себе не
 лишает заявителя возможности подать иск. Суд применяет давность, как правило,
@@ -127,8 +125,7 @@ training data on 2026-09-10, not verified against a live source. Меняет
 
 ### R-GPK-132 — ГПК РФ, статья 132: документы о досудебном порядке
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** парафраз; drafted from training data on 2026-09-10, not yet verified against a live source — re-check before reliance.
 
 **Содержание для ориентира:** в гражданском процессе подтверждение соблюдения
 досудебного порядка прикладывается, когда такой порядок установлен федеральным
