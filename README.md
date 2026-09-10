@@ -36,11 +36,20 @@ Skill-ветка по российскому праву для основате�
 
 ## Как установить
 
-**Через маркетплейс** (проще всего):
+**Через маркетплейс, Claude Code:**
 ```
 /plugin marketplace add serjdrej/ru-legal-skills
 /plugin install legal-ru@ru-legal-skills
 ```
+
+**Через маркетплейс, Codex CLI:**
+```
+codex plugin marketplace add serjdrej/ru-legal-skills
+codex plugin add legal-ru@ru-legal-skills
+```
+
+Обе команды читают один и тот же `ru-legal-skills/.claude-plugin/marketplace.json`
+— проверено вживую на обоих рантаймах.
 
 **Отдельно, без маркетплейса** — склонировать репозиторий в директорию
 скиллов Claude Code (`~/.claude/skills/legal-ru` — на других CLI-рантаймах
