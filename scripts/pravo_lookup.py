@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""Look up official-publication events on publication.pravo.gov.ru.
+"""Look up official-publication data on publication.pravo.gov.ru.
 
-The portal API was unreachable while this script was prepared.  Therefore its
-response schema and search-parameter semantics have not been independently
-verified.  The script sends a conservative number/text search request and
-will only print records when it can identify the requested fields in the JSON
-response; otherwise it reports the precise limitation and exits non-zero.
+Confirmed reachable and working from a Russian network (browser test,
+2026-09-10) -- a plain GET to /api/PublicBlocks/ returns JSON with no key and
+no auth. It is NOT reachable from every network: outbound calls from this
+project's own sandboxed agents (Claude's fetch tools, Codex's own sandbox
+with network "enabled") all time out on this host, which reads as a
+geo-block on non-Russian egress IPs rather than a broken endpoint. Run this
+script on your own machine, not inside an agent's sandbox.
+
+`blocks` uses the confirmed-working /api/PublicBlocks/ endpoint. `search` and
+`amendments` use /api/Document/Get, whose response schema is NOT independently
+confirmed yet -- they send a conservative number/text search request and only
+print records when the requested fields are recognisable in the JSON
+response; otherwise they report the precise limitation and exit non-zero
+rather than guessing.
 """
 
 from __future__ import annotations
@@ -20,11 +29,79 @@ from urllib.request import Request, urlopen
 
 
 API_URL = "https://publication.pravo.gov.ru/api/Document/Get"
+BLOCKS_URL = "https://publication.pravo.gov.ru/api/PublicBlocks/"
 TIMEOUT_SECONDS = 10
 
 
 class LookupError(RuntimeError):
     """An API or response limitation that must not be hidden from the user."""
+
+
+def _get_json(url: str) -> Any:
+    """Shared GET-and-decode-JSON helper, failing explicitly on any error."""
+    request = Request(url, headers={"Accept": "application/json", "User-Agent": "legal-ru-pravo-lookup/1"})
+    try:
+        with urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+            body = response.read()
+            status = response.status
+            content_type = response.headers.get("Content-Type", "")
+    except HTTPError as exc:
+        detail = exc.read(300).decode("utf-8", "replace").strip()
+        suffix = f" Response excerpt: {detail}" if detail else ""
+        raise LookupError(f"HTTP {exc.code} from {url} ({exc.reason}).{suffix}") from exc
+    except URLError as exc:
+        raise LookupError(
+            f"Network error reaching {url}: {exc.reason!s}. This host is known to be "
+            "unreachable from geo-blocked networks (any agent sandbox used on this "
+            "project so far) -- try running this script from your own machine/network."
+        ) from exc
+    except TimeoutError as exc:
+        raise LookupError(
+            f"Timed out after {TIMEOUT_SECONDS} seconds reaching {url}. This host is "
+            "known to be unreachable from geo-blocked networks -- try your own machine/network."
+        ) from exc
+
+    if status < 200 or status >= 300:
+        raise LookupError(f"Unexpected HTTP status {status} from {url}.")
+    try:
+        return json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        sample = body[:300].decode("utf-8", "replace").replace("\n", " ")
+        raise LookupError(
+            f"{url} returned non-JSON data (Content-Type: {content_type or 'not supplied'}; "
+            f"excerpt: {sample!r})."
+        ) from exc
+
+
+def request_blocks() -> Any:
+    """Fetch the confirmed-working publication-blocks tree (authorities/categories)."""
+    return _get_json(BLOCKS_URL)
+
+
+def print_blocks(payload: Any, indent: int = 0) -> None:
+    """Print the blocks tree recursively: code, name, id, and whether it has children."""
+    if not isinstance(payload, list):
+        raise LookupError(f"/api/PublicBlocks/ returned {type(payload).__name__}, expected a JSON array.")
+    prefix = "  " * indent
+    for block in payload:
+        if not isinstance(block, dict):
+            continue
+        code = block.get("code", "?")
+        name = block.get("name") or block.get("menuName") or block.get("shortName") or "?"
+        block_id = block.get("id", "?")
+        print(f"{prefix}[{code}] {name}  (id={block_id})")
+        items = block.get("items")
+        if isinstance(items, list) and items:
+            print_blocks(items, indent + 1)
+
+
+def run_blocks() -> int:
+    try:
+        print_blocks(request_blocks())
+    except LookupError as exc:
+        print(f"Lookup failed: {exc}", file=sys.stderr)
+        return 2
+    return 0
 
 
 def request_documents(query: str) -> Any:
@@ -40,31 +117,7 @@ def request_documents(query: str) -> Any:
         "CurrentPageNumber": "1",
     }
     url = f"{API_URL}?{urlencode(params)}"
-    request = Request(url, headers={"Accept": "application/json", "User-Agent": "legal-ru-pravo-lookup/1"})
-    try:
-        with urlopen(request, timeout=TIMEOUT_SECONDS) as response:
-            body = response.read()
-            status = response.status
-            content_type = response.headers.get("Content-Type", "")
-    except HTTPError as exc:
-        detail = exc.read(300).decode("utf-8", "replace").strip()
-        suffix = f" Response excerpt: {detail}" if detail else ""
-        raise LookupError(f"HTTP {exc.code} from Document/Get ({exc.reason}).{suffix}") from exc
-    except URLError as exc:
-        raise LookupError(f"Network error reaching Document/Get: {exc.reason!s}") from exc
-    except TimeoutError as exc:
-        raise LookupError(f"Timed out after {TIMEOUT_SECONDS} seconds reaching Document/Get.") from exc
-
-    if status < 200 or status >= 300:
-        raise LookupError(f"Unexpected HTTP status {status} from Document/Get.")
-    try:
-        return json.loads(body.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        sample = body[:300].decode("utf-8", "replace").replace("\n", " ")
-        raise LookupError(
-            f"Document/Get returned non-JSON data (Content-Type: {content_type or 'not supplied'}; "
-            f"excerpt: {sample!r})."
-        ) from exc
+    return _get_json(url)
 
 
 def record_candidates(payload: Any) -> Iterable[dict[str, Any]]:
@@ -156,8 +209,11 @@ def run_amendments(number: str) -> int:
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Search the official publication portal. Development verification found the portal API "
-            "unreachable, so the live JSON schema and query semantics remain unconfirmed."
+            "Query the official publication portal (publication.pravo.gov.ru). Run this on your own "
+            "machine, not inside an agent sandbox -- the host is unreachable from every sandbox tried "
+            "on this project so far (reads as a geo-block). 'blocks' uses a confirmed-working endpoint; "
+            "'search'/'amendments' use an endpoint whose response schema is not yet independently "
+            "confirmed and will report precisely what they can't recognise rather than guess."
         )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -171,6 +227,10 @@ def make_parser() -> argparse.ArgumentParser:
         ),
     )
     amendments.add_argument("number", help="base law number, for example 98-ФЗ")
+    subparsers.add_parser(
+        "blocks",
+        help="list publication blocks (issuing authorities/categories) -- confirmed working endpoint",
+    )
     return parser
 
 
@@ -178,7 +238,9 @@ def main() -> int:
     args = make_parser().parse_args()
     if args.command == "search":
         return run_search(args.query)
-    return run_amendments(args.number)
+    if args.command == "amendments":
+        return run_amendments(args.number)
+    return run_blocks()
 
 
 if __name__ == "__main__":

@@ -91,22 +91,62 @@ Follow `patent-ru/references/norms-registry.md` exactly:
 
 ## The lookup mechanism — `publication.pravo.gov.ru`
 
-`publication.pravo.gov.ru` is the Russian official-publication portal. Public
-API, read-only, evidence found (not independently confirmed by direct call —
-network to this host was unreachable from the machine this brief was written
-on; **verify by an actual call during this task, and record what you found**):
+`publication.pravo.gov.ru` is the Russian official-publication portal.
+**Confirmed reachable and working 2026-09-10** — by the project owner, from
+his own browser/network, not from any sandbox available to this project's
+agents. **Every automated tool tried from this project (Claude's WebFetch,
+Bash/curl, and Codex's own `os-sandbox` with network enabled) fails to reach
+this host at all, on any path — timeout, not an HTTP error.** Read as a
+geo-block on non-Russian egress IPs, not a broken endpoint. Consequence for
+every future task: **no dispatched agent can verify a citation against this
+API itself.** The owner can, in his own browser or by running
+`scripts/pravo_lookup.py` on his own machine. Design and prose accordingly —
+a script that fails honestly when unreachable, content that says "re-check
+this yourself" rather than "verified", never a task brief that assumes an
+agent's own network access will reach this host.
 
-- `GET /api/DocumentTypes[?SignatoryAuthorityId=<uuid>]` — JSON list of
-  publication blocks/sub-blocks, filterable by signing authority.
-- `GET /api/Document/Get?...` — search published acts, parameters observed in
-  third-party documentation include `RangeSize`, `CurrentPageNumber`,
-  `NumberSearchType`, `SignDateType`, `PubDateType` (exact parameter names and
-  semantics: confirm by calling it, don't take this list as final).
+**Confirmed live, by direct test (owner's browser, 2026-09-10):**
 
-No API key was found to be required. This is a registry of **official
-publication events** — every amending law is itself a separate published act,
-so searching by a base law's number surfaces its amendment history, but the
-portal is not a "consolidated current redaction" service (that is what
+`GET http://publication.pravo.gov.ru/api/PublicBlocks/` → JSON array, no key,
+no auth. Each element (a "block" = a publishing authority/category), observed
+fields: `id` (uuid), `name`, `shortName`, `menuName`, `code`, `description`,
+`weight`, `isBlocked`, `parent`, `parentId`, `hasChildren`, `items` (nested
+children of the same shape), `isAgenciesOfStateAuthorities`, `imageId`,
+`section`, `categories`, `treeViewParentId`. Top-level blocks observed, with
+their `id`:
+
+| `code` | `name` | `id` |
+|---|---|---|
+| `president` | Президент Российской Федерации | `e94b6872-dcac-414f-b2f1-a538d13a12a0` |
+| `assembly` | Федеральное Собрание Российской Федерации | `a30c9c82-4a21-48ab-a41d-d1891a10962c` |
+| `government` | Правительство Российской Федерации | `19bb10cd-32f3-4632-8303-c94dd5f45359` |
+| `federal_authorities` | ФОИВ и ФГО РФ | `28bdeebd-e2cf-45ce-8d2a-2bc1aaadd7fc` |
+| `court` | Конституционный Суд Российской Федерации | `b85249b6-f6e6-4562-a783-90ea989af2db` |
+| `subjects` | ОГВ субъектов РФ | `022fd55f-9f60-481e-a636-56d74b9ca759` |
+| `international` | Международные договоры РФ | `c79f71a1-c367-4e9d-a8b2-046cc8a1673f` |
+| `un_securitycouncil` | Совет Безопасности ООН | `f3ddeeb2-0bb5-4f28-989b-e0e8dead6e63` |
+
+`assembly` has children (`hasChildren: true`): Совет Федерации
+(`950cdcb1-f55d-4e22-9f05-87074fe08efd`, code `council_1`) and Государственная
+Дума (`0dbe1bc1-0e40-446a-a3ba-1ccabe18ca5e`, code `council_2`).
+
+**Still not independently confirmed** (nobody with working network access to
+the host has tried these yet):
+
+- `GET /api/Document/Get?...` — search published acts. Parameters seen in
+  third-party documentation only: `RangeSize`, `CurrentPageNumber`,
+  `NumberSearchType`, `SignDateType`, `PubDateType`, and a `SignatoryAuthorityId`
+  filter (now plausible given the confirmed `PublicBlocks` ids above — try
+  passing one of the ids in the table). Field names in the response records
+  (number/date/authority/link) are still unconfirmed — `pravo_lookup.py`'s
+  `search`/`amendments` commands guess at common variants and fail honestly if
+  none match; update them once someone with network access reports the real
+  response shape.
+
+This is a registry of **official publication events** — every amending law is
+itself a separate published act, so searching by a base law's number should
+surface its amendment history once `Document/Get`'s shape is confirmed, but
+the portal is not a "consolidated current redaction" service (that is what
 КонсультантПлюс/Гарант specialize in, and this project has no access to
 either).
 
