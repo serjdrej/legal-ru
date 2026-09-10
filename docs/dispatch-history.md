@@ -3,7 +3,7 @@
 This document replaces five earlier files (`TASK-01-lookup-and-commercial-secrecy.md`,
 `TASK-01b-commercial-secrecy-content.md`, `TASK-02-personal-data.md`,
 `TASK-03-corporate.md`, `TASK-04-pre-litigation.md`) that were removed from
-this repository, including its history, on 2026-09-11. Those files were
+this repository, including its history, on 2026-09-10. Those files were
 dispatch instructions written for an AI coding agent during development —
 they contained machine-specific local filesystem paths and language
 addressed to an agent (about non-interactive execution and approval flow)
