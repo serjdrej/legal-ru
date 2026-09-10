@@ -29,7 +29,7 @@ reference per task):
    коммерческой тайны set (98-ФЗ: an NDA is not a protected secret without the
    regime's measures — this is the single most common Anglo-American-template
    error in Russian practice), SaaS/vendor agreements, and what to refuse to
-   sign. ГК РФ Части 27–29 (formation/change/termination), ст.431
+   sign. ГК РФ Главы 27–29 (formation/change/termination), ст.431
    (interpretation), ст.333 (penalty reduction), ст.401–406 (liability, force
    majeure).
 2. **Personal data** — 152-ФЗ compliance for a data-collecting product:
