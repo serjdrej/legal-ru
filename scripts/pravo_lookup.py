@@ -9,12 +9,14 @@ with network "enabled") all time out on this host, which reads as a
 geo-block on non-Russian egress IPs rather than a broken endpoint. Run this
 script on your own machine, not inside an agent's sandbox.
 
-`blocks` uses the confirmed-working /api/PublicBlocks/ endpoint. `search` and
-`amendments` use /api/Document/Get, whose response schema is NOT independently
-confirmed yet -- they send a conservative number/text search request and only
-print records when the requested fields are recognisable in the JSON
-response; otherwise they report the precise limitation and exit non-zero
-rather than guessing.
+`blocks` targets /api/PublicBlocks/, whose JSON shape was confirmed by a
+manual browser test on 2026-09-10 (real field names, no key/auth) -- not by
+a successful run of this script itself, since the host is unreachable from
+every agent sandbox tried so far. `search` and `amendments` use
+/api/Document/Get, whose response schema is NOT independently confirmed at
+all -- all three commands only print a result when the requested fields are
+recognisable in the JSON response; otherwise they report the precise
+limitation and exit non-zero rather than guessing.
 """
 
 from __future__ import annotations
@@ -74,7 +76,8 @@ def _get_json(url: str) -> Any:
 
 
 def request_blocks() -> Any:
-    """Fetch the confirmed-working publication-blocks tree (authorities/categories)."""
+    """Fetch the publication-blocks tree (authorities/categories); shape confirmed by
+    manual browser test, not by a prior run of this function itself."""
     return _get_json(BLOCKS_URL)
 
 
@@ -211,9 +214,10 @@ def make_parser() -> argparse.ArgumentParser:
         description=(
             "Query the official publication portal (publication.pravo.gov.ru). Run this on your own "
             "machine, not inside an agent sandbox -- the host is unreachable from every sandbox tried "
-            "on this project so far (reads as a geo-block). 'blocks' uses a confirmed-working endpoint; "
-            "'search'/'amendments' use an endpoint whose response schema is not yet independently "
-            "confirmed and will report precisely what they can't recognise rather than guess."
+            "on this project so far (reads as a geo-block). 'blocks' targets an endpoint whose shape "
+            "a manual browser test confirmed (not a run of this script); 'search'/'amendments' use an "
+            "endpoint whose response schema is not independently confirmed at all. All three report "
+            "precisely what they can't recognise rather than guess."
         )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -229,7 +233,7 @@ def make_parser() -> argparse.ArgumentParser:
     amendments.add_argument("number", help="base law number, for example 98-ФЗ")
     subparsers.add_parser(
         "blocks",
-        help="list publication blocks (issuing authorities/categories) -- confirmed working endpoint",
+        help="list publication blocks (issuing authorities/categories) -- shape confirmed by manual browser test, not by a script run",
     )
     return parser
 

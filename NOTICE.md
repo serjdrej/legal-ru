@@ -3,8 +3,7 @@
 This repository (`legal-ru`) is licensed under the MIT License (see `LICENSE`).
 
 Its **structure and conventions** — a router `SKILL.md`, substance kept out of the
-router in `references/*.md` loaded one file at a time, checklists, the shape of a
-practice-continuity mechanism (a matter-workspace idea, adapted below), and
+router in `references/*.md` loaded one file at a time, checklists, and
 guardrail/disclaimer language — were studied from and partly adapted from
 [`anthropics/claude-for-legal`](https://github.com/anthropics/claude-for-legal),
 licensed under the Apache License 2.0. That project's `LICENSE` file is
@@ -34,10 +33,11 @@ reproduced in `THIRD-PARTY-NOTICES/claude-for-legal-LICENSE` for reference.
   analyzes US commercial, privacy, and employment law. None of its legal
   conclusions, checklists' substantive content, clause language, or citations
   were translated or ported into this repository. Every citation to Russian law
-  in this repository (ГК РФ, ТК РФ, 152-ФЗ, 98-ФЗ, 149-ФЗ, 14-ФЗ, 208-ФЗ, 135-ФЗ,
-  44-ФЗ, 223-ФЗ, АПК РФ, ГПК РФ, and related постановления Пленума ВС РФ) was
-  authored fresh, against the norms register in each `references/*.md` file, not
-  derived from the Apache-2.0 source.
+  actually present in this repository's content (currently ГК РФ, ТК РФ, 152-ФЗ,
+  242-ФЗ, 98-ФЗ, 14-ФЗ, 208-ФЗ, 129-ФЗ, АПК РФ, ГПК РФ — see each
+  `references/norms-registry-*.md` for the exact list,
+  which grows as the repository does) was authored fresh, against the norms
+  register in each `references/*.md` file, not derived from the Apache-2.0 source.
 - No connector, MCP server, hook, command, or scheduled agent from the original
   is present or implied.
 

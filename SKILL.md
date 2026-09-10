@@ -66,4 +66,4 @@ description: Russian-law skill for a founder acting as his own lawyer — contra
 
 | Скрипт | Роль |
 |---|---|
-| `scripts/pravo_lookup.py` | клиент `publication.pravo.gov.ru`: `blocks` (список издающих органов — подтверждённый рабочий эндпоинт), `search`/`amendments` (поиск опубликований по номеру акта — схема ответа не подтверждена, честно сообщает об ограничении) |
+| `scripts/pravo_lookup.py` | клиент `publication.pravo.gov.ru`: `blocks` (список издающих органов — форма ответа подтверждена вручную браузером 2026-09-10, а не запуском самого скрипта), `search`/`amendments` (поиск опубликований по номеру акта — схема ответа вообще не подтверждена, честно сообщает об ограничении) |
