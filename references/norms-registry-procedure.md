@@ -21,8 +21,10 @@
 
 ### R-APK-4 — АПК РФ, статья 4, часть 5: обязательный досудебный порядок
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. Задаёт
+конкретный срок ожидания (30 дней) и список исключений — оба должны быть
+перепроверены до любого расчёта даты подачи иска.
 
 **Содержание для ориентира:** для споров, возникающих из гражданских
 правоотношений и рассматриваемых арбитражным судом, эта норма устанавливает
@@ -59,8 +61,11 @@ verified against a live source — re-check before reliance.
 
 ### R-GK-196 — ГК РФ, статья 196: общий срок исковой давности
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. Это
+базовая цифра (3 года), от которой считается дедлайн подачи иска —
+преклюзивная ошибка здесь невосстановима, перепроверить перед любым
+реальным расчётом.
 
 **Содержание для ориентира:** общий срок исковой давности составляет три
 года. Для отдельных требований закон может устанавливать специальный срок;
@@ -86,8 +91,10 @@ verified against a live source — re-check before reliance.
 
 ### R-GK-200 — ГК РФ, статья 200: начало течения давности
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. Задаёт
+точку отсчёта преклюзивного срока — ошибка здесь сдвигает итоговую дату
+дедлайна, перепроверить перед расчётом.
 
 **Содержание для ориентира:** по общему правилу срок начинается со дня,
 когда лицо узнало или должно было узнать о нарушении права и о надлежащем
@@ -102,8 +109,11 @@ verified against a live source — re-check before reliance.
 
 ### R-GK-202-203 — ГК РФ, статьи 202–203: приостановление и перерыв
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. Меняет
+итоговую дату дедлайна (сдвигает или обнуляет отсчёт) — ошибочное
+приписывание основания напрямую даёт неверную дату, перепроверить перед
+расчётом.
 
 **Содержание для ориентира:** ГК РФ предусматривает установленные законом
 основания для приостановления течения исковой давности и отдельные основания
@@ -133,8 +143,10 @@ verified against a live source — re-check before reliance.
 
 ### R-GPK-112 — ГПК РФ, статья 112: восстановление процессуального срока
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. Единственная
+запись реестра о том, можно ли вообще исправить уже пропущенный
+преклюзивный срок — не полагаться на неё как на гарантию до перепроверки.
 
 **Содержание для ориентира:** ГПК РФ предусматривает возможность просить суд
 восстановить пропущенный процессуальный срок при уважительных причинах в
@@ -147,8 +159,11 @@ verified against a live source — re-check before reliance.
 
 ### R-APK-117 — АПК РФ, статья 117: восстановление процессуального срока
 
-**Статус:** paraphrase only; drafted from training data on 2026-09-10, not
-verified against a live source — re-check before reliance.
+**Статус:** PROCEDURAL DETAIL — extra caution. Paraphrase only, drafted from
+training data on 2026-09-10, not verified against a live source. То же, что
+у R-GPK-112, но для арбитражного процесса — для пресекательного срока
+восстановление может вовсе отсутствовать; не полагаться на неё без
+перепроверки.
 
 **Содержание для ориентира:** в арбитражном процессе также существует
 процедура восстановления некоторых пропущенных процессуальных сроков при
