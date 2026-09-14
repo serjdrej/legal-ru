@@ -184,6 +184,47 @@ So:
   citation — and, per the behavior change above, an agent running locally
   should actually run it itself when it matters, not only mention it.
 
+## Gap protocol — what happens when the registry has nothing
+
+Added 2026-09-14, prompted directly by the owner: the lookup mechanism above
+only helps once a `references/norms-registry-*.md` entry already exists to
+re-check. It says nothing about what the agent should do when a question
+falls **outside every registry** — an adjacent area of RF law this skill
+never built a branch for, a different jurisdiction (an EAEU member state, or
+any foreign law), agency guidance, or case law. Without an explicit rule, the
+default failure mode is the one this project has fought against everywhere
+else: answer fluently from training data, dressed up as if it were a
+citation, with no way for the reader to tell it apart from a reviewed entry.
+
+`SKILL.md`'s "Протокол пробела в базе" is the fix — a router-level rule, not
+a registry entry, because it has to fire *before* any registry is consulted.
+It splits the gap into two cases with different correct behavior:
+
+1. **Still RF federal legislation, just not registered yet.** The lookup
+   script already works for arbitrary titles — `by-title` doesn't require a
+   pre-existing registry entry to search against. So the right move is to
+   search live first, the same script and the same discipline as re-checking
+   an existing entry, then hand back the finding under a new, deliberately
+   weaker status tier: **AD HOC** — found live on a given date, not in any
+   registry, not reviewed, doctrine/practice unchecked. This is distinct from
+   the existing "парафраз ... не проверено" tier, which still implies a
+   human authored and reviewed the registry entry itself; an AD HOC finding
+   has had neither.
+2. **Not RF federal legislation at all.** `pravo_lookup.py` only reads this
+   one portal's federal-legislation text — it cannot help with case law,
+   agency letters, or another jurisdiction's law, EAEU members included. The
+   rule here is to say so plainly and ask the user how to proceed, rather
+   than let the model's general knowledge of, say, Kazakh or Belarusian law
+   stand in unlabeled. This is the same "ask rather than invent" instinct the
+   http/https investigation itself depended on — the owner asked directly to
+   re-test rather than accept the standing "geo-blocked" explanation.
+
+Deliberately left as router-level prose rather than a script feature: there
+is no live source to script against for case 2, and scripting case 1 would
+just be `pravo_lookup.py by-title` called automatically, which the agent can
+already do. The gap was procedural (what to do and how to label it), not
+technical.
+
 ## Testing
 
 Tested with the RED→GREEN→REFACTOR method: a baseline run without the skill
