@@ -84,80 +84,105 @@ Follow `patent-ru`'s own `references/norms-registry.md` exactly:
 
 ## The lookup mechanism — `publication.pravo.gov.ru`
 
-`publication.pravo.gov.ru` is the Russian official-publication portal.
-**Confirmed reachable and working 2026-09-10** — by the project owner, from
-his own browser/network, not from any AI-agent sandbox tried during
-development (web-fetch tooling, a plain HTTP client in a sandboxed shell, and
-a separate coding agent's own network-enabled sandbox all timed out on every
-path tried). Read as a geo-block on non-Russian egress IPs, not a broken
-endpoint. Consequence: **no dispatched agent can verify a citation against
-this API itself.** The user can, in his own browser or by running
-`scripts/pravo_lookup.py` on his own machine. Design and prose accordingly —
-a script that fails honestly when unreachable, content that says "re-check
-this yourself" rather than "verified", never a claim that an agent's own
-network access will reach this host.
+`publication.pravo.gov.ru` is the Russian official-publication portal, and
+**it works** — reachable and fully functional from a normal local machine,
+including an agent (Claude Code) running as an installed skill on the
+project owner's own computer. This was wrongly documented for several days
+as "unreachable from every agent sandbox — a geo-block"; that was a
+misdiagnosis, corrected 2026-09-14, recorded here so the mistake and its
+fix are both on the record rather than just the fix.
 
-**Confirmed live, by direct test (owner's browser, 2026-09-10):**
+**What was actually wrong:** every URL in this project used `https://`.
+This host's HTTPS does not complete a TCP handshake for any client tried —
+not a geo-block, just broken/unserved HTTPS on that path. Plain `http://`
+answers in well under a second, same host, same machine, same network.
+Two things kept this hidden: `curl`-style command-line tools were tested
+first and failed for unrelated Windows/Schannel reasons that looked similar,
+and Claude's own `WebFetch` tool **silently upgrades any `http://` URL to
+`https://`** (stated in its own tool description) — so even a correctly
+`http://`-addressed request routed through WebFetch still fails, which is
+why repeated testing through that specific tool kept "confirming" the wrong
+explanation. A plain Python `urllib` request — what `scripts/pravo_lookup.py`
+actually uses — was never tried against `http://` until 2026-09-14, when it
+worked immediately.
 
-`GET http://publication.pravo.gov.ru/api/PublicBlocks/` → JSON array, no key,
-no auth. Each element (a "block" = a publishing authority/category), observed
-fields: `id` (uuid), `name`, `shortName`, `menuName`, `code`, `description`,
-`weight`, `isBlocked`, `parent`, `parentId`, `hasChildren`, `items` (nested
-children of the same shape), `isAgenciesOfStateAuthorities`, `imageId`,
-`section`, `categories`, `treeViewParentId`. Top-level blocks observed, with
-their `id`:
+**Consequence for how this skill should behave:** an agent running Claude
+Code **locally**, as this skill is installed and used, should actually run
+`scripts/pravo_lookup.py` itself before relying on a registry entry — not
+only tell the user to run it separately. Cloud-hosted fetch tools (WebFetch,
+and likely any bridge/dispatch whose sandbox runs off-machine) may still
+fail against this host for the reason above; that is a property of those
+specific tools, not a reason to assume no agent can ever reach it.
 
-| `code` | `name` | `id` |
-|---|---|---|
-| `president` | Президент Российской Федерации | `e94b6872-dcac-414f-b2f1-a538d13a12a0` |
-| `assembly` | Федеральное Собрание Российской Федерации | `a30c9c82-4a21-48ab-a41d-d1891a10962c` |
-| `government` | Правительство Российской Федерации | `19bb10cd-32f3-4632-8303-c94dd5f45359` |
-| `federal_authorities` | ФОИВ и ФГО РФ | `28bdeebd-e2cf-45ce-8d2a-2bc1aaadd7fc` |
-| `court` | Конституционный Суд Российской Федерации | `b85249b6-f6e6-4562-a783-90ea989af2db` |
-| `subjects` | ОГВ субъектов РФ | `022fd55f-9f60-481e-a636-56d74b9ca759` |
-| `international` | Международные договоры РФ | `c79f71a1-c367-4e9d-a8b2-046cc8a1673f` |
-| `un_securitycouncil` | Совет Безопасности ООН | `f3ddeeb2-0bb5-4f28-989b-e0e8dead6e63` |
+**The real API**, read directly from this host's own `/help` page on
+2026-09-14 (not third-party documentation, which had the wrong endpoint
+name and wrong parameter names — see below):
 
-`assembly` has children (`hasChildren: true`): Совет Федерации
-(`950cdcb1-f55d-4e22-9f05-87074fe08efd`, code `council_1`) and Государственная
-Дума (`0dbe1bc1-0e40-446a-a3ba-1ccabe18ca5e`, code `council_2`).
+- Base endpoint: `GET http://publication.pravo.gov.ru/api/Documents`
+  (plural — not `/api/Document/Get`, which this project guessed at for
+  several days and which returns 404). Query parameters actually confirmed
+  working: `Number` + `NumberSearchType` (`0`=exact, `1`=starts-with,
+  `2`=ends-with, `3`=contains), `Name` (title-substring search — reliable),
+  `PageSize` (`10`/`30`/`100`/`200`). `ComplexName` and `DocumentText` are
+  documented as searchable but were found **not** to behave as documented
+  (`ComplexName` matched ~1.7 million records regardless of query;
+  `DocumentText` returned zero for a phrase known to exist) — don't use
+  either until someone re-verifies them properly.
+- Response shape: `{"items": [...], "itemsTotalCount": N, "itemsPerPage": N,
+  "currentPage": N, "pagesTotalCount": N}`. Each item:  `id`, `eoNumber`,
+  `publishDateShort`, `viewDate`, `complexName`, `title`, `jdRegNumber`,
+  `jdRegDate`, `pagesCount`, `pdfFileLength`, `zipFileLength`, `name`,
+  `number`, `documentDate`, `signatoryAuthorityId`, `documentTypeId`,
+  `hasSvg`.
+- `GET http://publication.pravo.gov.ru/api/PublicBlocks/` — unchanged from
+  the earlier finding: JSON array of publication blocks/issuing
+  authorities, no key, no auth. Field names and the top-level block table
+  from the original 2026-09-10 finding are still accurate (only the scheme
+  was wrong) — see the git history of this file for that table if needed.
 
-**Still not independently confirmed** (nobody with working network access to
-the host has tried these yet):
+**A federal law's own number is not unique across years** — confirmed by an
+exact-match search for `Number=98-ФЗ`: 15+ completely unrelated laws share
+that number, one per year going back to at least 2012. Never trust a
+Number-only search result without checking its `documentDate` against the
+law you actually mean.
 
-- `GET /api/Document/Get?...` — search published acts. Parameters seen in
-  third-party documentation only: `RangeSize`, `CurrentPageNumber`,
-  `NumberSearchType`, `SignDateType`, `PubDateType`, and a `SignatoryAuthorityId`
-  filter (now plausible given the confirmed `PublicBlocks` ids above — try
-  passing one of the ids in the table). Field names in the response records
-  (number/date/authority/link) are still unconfirmed — `pravo_lookup.py`'s
-  `search`/`amendments` commands guess at common variants and fail honestly if
-  none match; update them once someone with network access reports the real
-  response shape.
+**This system's own coverage starts around 2011-2012** (earliest dates
+observed) — it is the electronic official-publication record, not an
+archive back to a law's original enactment. A pre-2012 law's own original
+publication will not be found here; its later amendments (each a separate,
+newer publication) can be.
 
-This is a registry of **official publication events** — every amending law is
-itself a separate published act, so searching by a base law's number should
-surface its amendment history once `Document/Get`'s shape is confirmed, but
-the portal is not a "consolidated current redaction" service (that is what
-КонсультантПлюс/Гарант specialize in, and this project has no access to
-either).
+**`Name` (title) search is the reliable way to find a law and its
+amendments** — confirmed live: searching `Name=коммерческой тайне` found
+two real amendments to 98-ФЗ "О коммерческой тайне" that no registry in
+this project had recorded before this search found them: **86-ФЗ от
+18.04.2018** (amending ст.5) and **311-ФЗ от 14.07.2022** (amending ст.6).
+This is exactly the kind of gap the whole lookup mechanism exists to catch —
+see `references/norms-registry-statutes.md` for how this finding was
+recorded against the affected entries.
 
-**Design constraint, and it happens to fit this API well:** no MCP server, no
+This is a registry of **official publication events** — every amending law
+is itself a separate published act, findable by title even when the base
+law predates this system — but the portal is not a "consolidated current
+redaction" service (that is what КонсультантПлюс/Гарант specialize in, and
+this project has no access to either). Finding that 86-ФЗ and 311-ФЗ amended
+98-ФЗ tells you *that* ст.5 and ст.6 changed, not the resulting text — read
+the amending act itself for that.
+
+**Design constraint, still true and still a good fit:** no MCP server, no
 connector, and the skill must not silently depend on network access baked
-into its own runtime behavior. So:
+into its own runtime behavior in a way that breaks when it's not available.
+So:
 
-- `scripts/pravo_lookup.py` is a script **the user runs himself**, no API
-  key needed (if the portal ever gates an endpoint behind a key, follow the
-  `patent-ru` `scripts/keystore.py` pattern for it, don't invent a new one).
-  Input: a law's number/date or free-text query. Output: matching published
-  acts (number, date, signing authority, a link to the published text) and,
-  where feasible, the list of acts that have amended it since.
+- `scripts/pravo_lookup.py` needs no API key. Input: an exact law number
+  (`search`) or title keywords (`by-title`). Output: matching published
+  acts (number, date, title, `eoNumber`, internal id).
   It degrades honestly if the portal is unreachable or its API shape has
-  changed — it reports what's unavailable, never fails opaquely or fabricates
-  a result.
-- The `references/*.md` files point the user at **running that script**, or
-  at the stable entry point directly, to verify a citation — never present a
-  citation as current without that instruction attached.
+  changed — it reports what's unavailable, never fails opaquely or
+  fabricates a result.
+- The `references/*.md` files point at **running that script** to verify a
+  citation — and, per the behavior change above, an agent running locally
+  should actually run it itself when it matters, not only mention it.
 
 ## Testing
 

@@ -41,19 +41,20 @@ settled. The intended verification path is `publication.pravo.gov.ru`, the
 official Russian legal-publication portal, via `scripts/pravo_lookup.py`,
 which the user runs on his own machine.
 
-A material finding from building that script: `publication.pravo.gov.ru`
-was **unreachable from every AI-agent sandbox tried during development**
+A material finding from building that script, at the time: `publication.pravo.gov.ru`
+appeared **unreachable from every AI-agent sandbox tried during development**
 (web-fetch tooling, a plain HTTP client run inside a sandboxed shell, and a
 separate coding agent's own network-enabled sandbox all timed out on every
-path tried) — consistent with a geo-block on non-Russian egress IPs. It was
-confirmed reachable only from the project owner's own browser and network.
-One endpoint's exact shape (`/api/PublicBlocks/` — a list of publication
-blocks/issuing authorities, real field names, no API key) was confirmed
-this way and is wired into `scripts/pravo_lookup.py`'s `blocks` command. A
-second endpoint (`/api/Document/Get`, used for `search`/`amendments`) has a
-plausible parameter set from third-party documentation but its exact
-response schema was never independently confirmed by a live call — the
-script is written to fail honestly rather than guess at its shape.
+path tried), read as a geo-block on non-Russian egress IPs. **This was wrong,
+corrected 2026-09-14: every URL used `https://`, which hangs on this host;
+`http://` answers instantly, from the same machine.** The script now uses
+`http://` and works normally when run locally, including by an agent running
+Claude Code on the project owner's own machine — see `docs/BRIEF.md`, "The
+lookup mechanism", for the full correction and what else it changed (the
+real API endpoint turned out to be `/api/Documents`, not `/api/Document/Get`,
+with different parameter names than third-party documentation suggested).
+This paragraph is left describing the mistake, not just the fix, since the
+mistake shaped several days of this project's design decisions.
 
 ## Testing
 

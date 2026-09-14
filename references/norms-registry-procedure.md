@@ -9,9 +9,9 @@
 
 Первичная точка входа для опубликованных федеральных актов —
 `publication.pravo.gov.ru`. Для поиска события публикации используйте на
-своей машине `python scripts/pravo_lookup.py search "АПК РФ"`,
-`python scripts/pravo_lookup.py search "ГПК РФ"` или
-`python scripts/pravo_lookup.py search "Гражданский кодекс"`. Портал —
+своей машине `python scripts/pravo_lookup.py by-title "АПК РФ"`,
+`python scripts/pravo_lookup.py by-title "ГПК РФ"` или
+`python scripts/pravo_lookup.py by-title "Гражданский кодекс"`. Портал —
 реестр публикаций, а не гарантированно сводная актуальная редакция: после
 поиска нужно сопоставить опубликованные изменения с действующим текстом в
 авторитетном источнике. Если скрипт сообщает, что схема поиска не подтверждена
