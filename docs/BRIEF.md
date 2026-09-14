@@ -225,6 +225,35 @@ just be `pravo_lookup.py by-title` called automatically, which the agent can
 already do. The gap was procedural (what to do and how to label it), not
 technical.
 
+**RED→GREEN pressure-tested 2026-09-14** with three questions chosen to hit
+both cases: a 44-ФЗ penalty/termination question (case 1 — RF federal law,
+no registry entry), a Kazakhstan construction-guarantee question (case 2 —
+EAEU jurisdiction, named explicitly in the protocol text), and a Supreme
+Court practice question under ст.723 ГК РФ (case 2 — judicial practice about
+a norm, not the norm's text, despite naming a real GK РФ article). RED (no
+skill) answered all three fluently, with real hedging on the two unfamiliar
+ones but never stopping to ask the user anything. GREEN (skill loaded)
+classified all three correctly and, for both case-2 questions, refused to
+answer substantively and returned the user a three-option question instead
+— the actual behavior the owner asked for. GREEN also ran `by-title` for
+real against `publication.pravo.gov.ru` for the case-1 question rather than
+just describing that it would.
+
+**What REFACTOR fixed:** the GREEN run itself flagged the gap — `by-title`
+confirms an act exists, is current, and what amendments it has, but never
+returns article text, so an AD HOC finding's specific figures (a percentage,
+a day count) are still recalled from training data, not verified, even
+though the finding as a whole reads as "confirmed live." The original AD
+HOC wording didn't separate these two levels of confidence. Rewrote it to
+say so explicitly: AD HOC now means the *act's existence and currency* is
+live-confirmed, not its specific content, unless the script's own output
+happened to include that content. Also tightened the case-1/case-2 split
+itself: a statute article number in the question (like ст.723 ГК РФ) does
+not by itself make it case 1 if the actual ask is about judicial practice
+interpreting that article, not the article's text — the GREEN run got this
+right but noted it as the one place it had to reason rather than follow the
+rule mechanically, so the rule now says it directly.
+
 ## Testing
 
 Tested with the RED→GREEN→REFACTOR method: a baseline run without the skill
