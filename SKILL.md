@@ -1,6 +1,6 @@
 ---
 name: legal-ru
-description: Russian-law skill for a founder acting as his own lawyer — contracts and the режим коммерческой тайны (NDA/соглашение о конфиденциальности), 152-ФЗ personal data (политика конфиденциальности, уведомление Роскомнадзора, локализация), corporate (корпоративный договор, решения участников, ЕГРЮЛ), and pre-litigation (претензионный порядок, исковая давность, процессуальные сроки). Use when the user mentions проверить договор, режим коммерческой тайны, соглашение о конфиденциальности, NDA, политика конфиденциальности, персональные данные, уведомление Роскомнадзора, трансграничная передача данных, корпоративный договор, устав, ЕГРЮЛ, претензионный порядок, исковая давность, исковое заявление, трудовой договор (глава 14 ТК РФ — cross-referenced, not a full employment branch), or cites a Russian statute/article (ГК РФ, ТК РФ, 152-ФЗ, 98-ФЗ, 14-ФЗ, 208-ФЗ, 129-ФЗ, АПК РФ, ГПК РФ) and asks whether it applies. Intellectual property is out of scope — route to patent-ru instead.
+description: Russian-law skill for a founder — contracts and the режим коммерческой тайны (NDA/соглашение о конфиденциальности), договор подряда and строительный подряд from a contractor's side, 152-ФЗ personal data (политика конфиденциальности, уведомление Роскомнадзора, локализация), corporate (корпоративный договор, решения участников, ЕГРЮЛ), and pre-litigation (претензионный порядок, исковая давность, процессуальные сроки). Triggers: проверить договор, режим коммерческой тайны, соглашение о конфиденциальности, NDA, персональные данные, уведомление Роскомнадзора, трансграничная передача данных, договор подряда, строительный подряд, приёмка работ, акт выполненных работ, односторонний акт, гарантия качества работ, корпоративный договор, устав, ЕГРЮЛ, претензионный порядок, исковая давность, исковое заявление, трудовой договор (глава 14 ТК РФ, cross-referenced only), or cites ГК РФ, ТК РФ, 152-ФЗ, 98-ФЗ, 14-ФЗ, 208-ФЗ, 129-ФЗ, АПК РФ, ГПК РФ. IP is out of scope — route to patent-ru instead.
 ---
 
 # Российское право для основателя, который сам себе юрист
@@ -17,6 +17,7 @@ description: Russian-law skill for a founder acting as his own lawyer — contra
 | 152-ФЗ: политика обработки персональных данных, согласие, уведомление Роскомнадзора, локализация (242-ФЗ), трансграничная передача, инцидент/утечка | [references/personal-data.md](references/personal-data.md) |
 | Корпоративный договор, решения/протоколы участников, изменения устава, что триггерит подачу в ЕГРЮЛ | [references/corporate.md](references/corporate.md) |
 | Претензия и претензионный порядок, исковая давность, преклюзивные процессуальные сроки | [references/pre-litigation.md](references/pre-litigation.md) |
+| Договор подряда/строительный подряд, приёмка работ, акт выполненных работ, односторонний акт, гарантия качества работ | [references/podryad.md](references/podryad.md) |
 | Проверить, что конкретная статья/норма ещё актуальна, прежде чем на неё опереться | реестр соответствующей ветки — см. таблицу ниже |
 | Патенты, изобретения, товарные знаки — вне периметра этого скилла | `patent-ru` (отдельный скилл в библиотеке) |
 
@@ -27,6 +28,7 @@ description: Russian-law skill for a founder acting as his own lawyer — contra
 | Коммерческая тайна / NDA | [references/norms-registry-statutes.md](references/norms-registry-statutes.md) |
 | Персональные данные | [references/norms-registry-personal-data.md](references/norms-registry-personal-data.md) |
 | Корпоративное | [references/norms-registry-corporate.md](references/norms-registry-corporate.md) |
+| Подряд/строительный подряд | [references/norms-registry-podryad.md](references/norms-registry-podryad.md) |
 | Досудебное/процессуальное | [references/norms-registry-procedure.md](references/norms-registry-procedure.md) |
 
 ### Стыки — где допустимо два файла за раз
@@ -35,6 +37,8 @@ description: Russian-law skill for a founder acting as his own lawyer — contra
   `personal-data.md` (обе ссылаются на ТК РФ Гл.14, но не пересказывают её).
 - Претензия по корпоративному спору (например, к бывшему участнику) →
   `pre-litigation.md` + `corporate.md`.
+- Претензия/спор по договору подряда (неоплата, дефект, отказ от приёмки) →
+  `pre-litigation.md` + `podryad.md`.
 
 Во всех остальных случаях — один файл.
 
