@@ -85,6 +85,12 @@ verified against a live source — re-check before reliance](norms-registry-podr
   PROCEDURAL DETAIL — extra caution; paraphrase only, drafted from training
   data on 2026-09-10, not yet verified against a live source — re-check before
   reliance](norms-registry-podryad.md#r-podryad-755-756--гк-рф-статьи-755756-гарантия-и-сроки-обнаружения-недостатков).
+  Если недостаток заявлен в пределах гарантийного срока — давность по этому
+  требованию считается по специальному правилу (для зданий/сооружений три
+  года, иначе год) и **начинает течь заново со дня заявления о недостатке**,
+  а не с даты приёмки. [R-PODRYAD-725 — PROCEDURAL DETAIL — extra caution;
+  paraphrase only, drafted from training data on 2026-09-10, not verified
+  against a live source](norms-registry-podryad.md#r-podryad-725--гк-рф-статья-725-давность-по-искам-о-ненадлежащем-качестве-работы).
 - Для возможных дефектов сохранены акты, фото, сведения об эксплуатации и
   доступ к осмотру до ремонта заказчиком. [R-PODRYAD-757 — paraphrase only,
   drafted from training data on 2026-09-10, not yet verified against a live
