@@ -20,12 +20,15 @@ reproduced in `THIRD-PARTY-NOTICES/claude-for-legal-LICENSE` for reference.
   different means, described in each affected `references/*.md` file.
 - The plugin/skill decomposition is narrowed from the original's twelve plugin
   groups (151 skills, built for firms and in-house departments with attorneys to
-  review the output) to four areas built for a single founder acting as his own
+  review the output) to five areas built for a single founder acting as his own
   lawyer: contracts (incl. commercial-secrecy regime), personal data (152-ФЗ),
-  corporate, and pre-litigation. `law-student`, `legal-clinic`,
+  corporate, договор подряда/строительный подряд (ГК РФ Глава 37, from the
+  contractor's side), and pre-litigation. `law-student`, `legal-clinic`,
   `legal-builder-hub`, and the deeper litigation machinery are not carried over.
   Intellectual property is deliberately out of scope here — see
-  [`patent-ru`](https://github.com/serjdrej/patent-ru), which owns that ground.
+  [`patent-ru`](https://github.com/serjdrej/patent-ru), which owns that ground;
+  proceedings in state court after pre-litigation are out of scope — see
+  [`arbitrazh-ru`](https://github.com/serjdrej/arbitrazh-ru).
 
 **What was NOT taken from the original, and must not be assumed present:**
 
